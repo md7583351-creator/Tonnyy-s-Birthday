@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Tonny 🌈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0; padding: 0;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; overflow: hidden;
+            font-family: 'Indie Flower', cursive;
+        }
+
+        /* VIBRANT ANIMATED BACKGROUND */
+        .confetti-bg {
+            position: absolute; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            width: 320px;
+            height: 220px;
+            z-index: 10;
+            margin-top: 150px; /* Gives space for letter to rise */
+        }
+
+        .envelope {
+            position: relative;
+            width: 100%; height: 100%;
+            background: #ff4d6d; 
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            z-index: 2;
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0; z-index: 4;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #ff758f; 
+            transform-origin: top;
+            transition: transform 0.6s 0.4s;
+        }
+
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        /* FIXED LETTER ANIMATION - STAY ON SCREEN */
+        .letter {
+            position: absolute;
+            bottom: 20px; left: 10px;
+            width: 300px; 
+            height: 400px; 
+            background: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: transform 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 3;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            border-radius: 15px;
+            opacity: 0;
+            overflow-y: auto; /* Makes big message scrollable */
+            border: 3px solid #ffccd5;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-320px); /* Adjusted so it stays visible */
+            opacity: 1;
+        }
+
+        .letter h2 {
+            font-family: 'Dancing Script';
+            color: #ff4d6d;
+            margin: 0; font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .letter p {
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.5;
+            white-space: pre-line;
+            margin-top: 10px;
+        }
+
+        .seal {
+            position: absolute;
+            top: 85px; left: 135px;
+            width: 50px; height: 50px;
+            background: #ff0055;
+            z-index: 10;
+            transform: rotate(-45deg);
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255,0,85,0.5);
+        }
+        .seal::before, .seal::after {
+            content: ''; position: absolute;
+            width: 50px; height: 50px;
+            background: #ff0055; border-radius: 50%;
+        }
+        .seal::before { top: -25px; left: 0; }
+        .seal::after { top: 0; left: 25px; }
+
+        .envelope-wrapper.open .seal {
+            opacity: 0; pointer-events: none;
+        }
+
+        .hint {
+            position: absolute;
+            bottom: -60px; width: 100%;
+            text-align: center; color: white;
+            font-weight: bold; text-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="confetti-bg" id="confetti"></div>
+
+    <div class="envelope-wrapper" id="envelope" onclick="openLetter()">
+        <div class="seal"></div>
+        <div class="envelope"></div>
+        <div class="letter">
+            <h2>For Tonny! 🎉💖🌷</h2>
+            <p id="msg-content"></p>
+        </div>
+        <div class="hint">TAP TO BLOOM ✨🌷</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <script>
+        const fullMessage = "Happy Birthday to the most amazing, dazzling, unforgettable person in the world! 🥳🌟🌷 I feel so lucky that you’re in my life—honestly, you make everything brighter, happier, and more magical just by being you 💛😊. \n\nEvery little thing about you—from your smile to your laugh—feels like a tulip blooming in my heart 🌷✨. I really wish I could be there to celebrate this special day with you 🎂💌… it feels like a tulip missing in a garden without you 🥺🌷.\n\nI hope today brings you laughter like a field of tulips dancing in the breeze 🌷😂, love as warm as a tulip kissed by sunlight 🌞🌷, and surprises that make your heart bloom like the rarest tulip in the world 💖🌷.\n\nAnd who knows… maybe the universe has a few secret tulip-shaped plans for us 😉💫🌷. I secretly hope that someday we’ll share moments like this together, where every smile feels like a tulip opening just for us ✨💛🌷.\n\nEnjoy every second of your day, Tonny—someone as incredible as you deserves nothing less than pure tulip magic 🌷✨💖. I’m rooting for you, thinking of you, and dreaming a little about a future where tulips, smiles, and maybe even we… bloom together 🌟💌🌷💛.";
+
+        function openLetter() {
+            const wrapper = document.getElementById('envelope');
+            if(!wrapper.classList.contains('open')) {
+                wrapper.classList.add('open');
+                
+                // COLORFUL EXPLOSION
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#ff4d6d', '#ffccd5', '#ff0055', '#ff758f', '#ffb3c1']
+                });
+
+                let i = 0;
+                const msgElement = document.getElementById('msg-content');
+                
+                function typeWriter() {
+                    if (i < fullMessage.length) {
+                        msgElement.innerHTML += fullMessage.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 35);
+                    }
+                }
+                setTimeout(typeWriter, 1200); 
+            }
+        }
+    </script>
+</body>
+</html>
